@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منظم مهام الاختبارات</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="</_sdk/element_sdk.js"></script>
+    <script src="1.Js"></script>
+    <link href="1.css" rel="stylesheet">
+    
+</head>
+<body class="h-full m-0 p-0">
+
+    
+    <div class="app-wrapper w-full h-full overflow-auto custom-scrollbar">
+        <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+            
+            <!-- الرأس -->
+            <header class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-red-500 mb-4 shadow-lg">
+                    <span class="text-3xl">📚</span>
+                </div>
+                <h1 id="site-title" class="main-title text-3xl sm:text-4xl font-extrabold mb-2">منظم مهام الاختبارات</h1>
+                <p class="text-gray-400 text-sm">نظم مهامك الدراسية واستعد للاختبارات بكفاءة</p>
+            </header>
+            
+            <!-- نموذج إضافة مهمة -->
+            <div class="glass-card rounded-2xl p-6 mb-6 form-card">
+                <h2 class="text-white text-lg font-bold mb-4 flex items-center gap-2">
+                    <span>✨</span>
+                    إضافة مهمة جديدة
+                </h2>
+                
+                <form id="task-form" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- اسم المادة -->
+                        <div>
+                            <label for="subject" class="block text-gray-300 text-sm mb-2">المادة الدراسية</label>
+                            <input 
+                                type="text" 
+                                id="subject" 
+                                class="input-field w-full px-4 py-3 rounded-xl text-sm"
+                                placeholder="مثال: الرياضيات"
+                                required
+                            >
+                        </div>
+                        
+                        <!-- تاريخ الاختبار -->
+                        <div>
+                            <label for="exam-date" class="block text-gray-300 text-sm mb-2">تاريخ الاختبار</label>
+                            <input 
+                                type="date" 
+                                id="exam-date" 
+                                class="input-field w-full px-4 py-3 rounded-xl text-sm"
+                                required
+                            >
+                        </div>
+                    </div>
+                    
+                    <!-- وصف المهمة -->
+                    <div>
+                        <label for="task-desc" class="block text-gray-300 text-sm mb-2">وصف المهمة</label>
+                        <input 
+                            type="text" 
+                            id="task-desc" 
+                            class="input-field w-full px-4 py-3 rounded-xl text-sm"
+                            placeholder="مثال: مراجعة الفصل الثالث"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- الأولوية -->
+                        <div>
+                            <label for="priority" class="block text-gray-300 text-sm mb-2">الأولوية</label>
+                            <select id="priority" class="input-field w-full px-4 py-3 rounded-xl text-sm">
+                                <option value="high">🔴 عالية</option>
+                                <option value="medium" selected>🟡 متوسطة</option>
+                                <option value="low">🟢 منخفضة</option>
+                            </select>
+                        </div>
+                        
+                        <!-- زر الإضافة -->
+                        <div class="flex items-end">
+                            <button 
+                                type="submit" 
+                                id="add-btn"
+                                class="btn-primary w-full px-6 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
+                            >
+                                <span id="add-btn-text">إضافة مهمة</span>
+                                <span id="add-spinner" class="loading-spinner hidden"></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- إحصائيات -->
+            <div class="grid grid-cols-3 gap-3 mb-6">
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <div id="total-count" class="text-2xl font-bold text-white">0</div>
+                    <div class="text-gray-400 text-xs">إجمالي المهام</div>
+                </div>
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <div id="pending-count" class="text-2xl font-bold text-yellow-400">0</div>
+                    <div class="text-gray-400 text-xs">قيد الإنجاز</div>
+                </div>
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <div id="completed-count" class="text-2xl font-bold text-green-400">0</div>
+                    <div class="text-gray-400 text-xs">مكتملة</div>
+                </div>
+            </div>
+            
+            <!-- تصفية المهام -->
+            <div class="flex flex-wrap gap-2 mb-4">
+                <button class="filter-btn btn-secondary px-4 py-2 rounded-lg text-sm active" data-filter="all">الكل</button>
+                <button class="filter-btn btn-secondary px-4 py-2 rounded-lg text-sm" data-filter="pending">قيد الإنجاز</button>
+                <button class="filter-btn btn-secondary px-4 py-2 rounded-lg text-sm" data-filter="completed">مكتملة</button>
+            </div>
+            
+            <!-- قائمة المهام -->
+            <div id="tasks-container" class="space-y-3">
+                <!-- حالة فارغة -->
+                <div id="empty-state" class="empty-state text-center py-12">
+                    <div class="text-5xl mb-4">📝</div>
+                    <h3 class="text-lg font-semibold mb-2">لا توجد مهام بعد</h3>
+                    <p class="text-sm">ابدأ بإضافة مهامك الدراسية للاستعداد للاختبارات</p>
+                </div>
+            </div>
+            
+            <!-- تحذير الحد الأقصى -->
+            <div id="limit-warning" class="hidden glass-card rounded-xl p-4 mt-4 text-center border border-yellow-500/30">
+                <span class="text-yellow-400">⚠️ وصلت للحد الأقصى (999 مهمة). احذف بعض المهام للإضافة.</span>
+            </div>
+            
+        </div>
+    </div>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ca6f5eb4623ca01',t:'MTc3MDUxMDAyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>
